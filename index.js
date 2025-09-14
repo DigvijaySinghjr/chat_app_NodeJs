@@ -9,13 +9,14 @@ const io = socketio(server);
 io.on('connection', (socket) => {
     console.log('a user connected', socket.id);
 
-    socket.on('from_client', () => {
-        console.log("event coming fro the client");
+    socket.on('msg_send', (data) => {                              //listening for data to recieve
+        console.log(data);
+        //io.emit('msg_rcvd', data);                                  // send to all 
+        //socket.emit('msg_rcvd', data)                               // send to server
+        socket.broadcast.emit('msg_rcvd', data)                        // send to room or group
     })
 
-    setInterval(() => {
-        socket.emit('from_server');
-    }, 2000);
+   
 });
 
 app.use('/', express.static(__dirname + '/public'));
