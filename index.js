@@ -9,25 +9,27 @@ const server = http.createServer(app);
 const io = socketio(server);
  
 io.on('connection', (socket) => {
-    // console.log('a user connected', socket.id);
+    socket.on('join_room', (data) => {
+    console.log('joining a room ');
+        socket.join(data.roomid);
+    })
 
-    // socket.on('msg_send', (data) => {                              //listening for data to recieve
-    //     console.log(data);
-    //     //io.emit('msg_rcvd', data);                                  // send to all 
-    //     //socket.emit('msg_rcvd', data)                               // send to server
-    //     socket.broadcast.emit('msg_rcvd', data)                        // send to room or group
-    // })
-
-
-
+    socket.on('msg_send', (data) => {                              //listening for data to recieve
+        console.log(data);
+        //io.emit('msg_rcvd', data);                                  // send to all 
+        //socket.emit('msg_rcvd', data)                               // send to server
+        //socket.broadcast.emit('msg_rcvd', data)                        // send to room or group
+        io.to(data.roomid).emit('msg_rcvd', data)
+    });
 });
 app.set('view engine',  'ejs');
 app.use('/', express.static(__dirname + '/public'));
 
 app.get('/chat/:roomid', (req, res) => {
     res.render('index', {
-        name: "Sanket",
+        name: "Sanket ",
         id: req.params.roomid
+       
     });
 })
 

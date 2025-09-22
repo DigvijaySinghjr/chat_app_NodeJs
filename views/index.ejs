@@ -7,7 +7,47 @@
   </head>
   <body>
     <h1>Chat box</h1>
-    <%= name %>
-    <%= id %>
+    <!-- <%= name %>
+    <%= id %> -->
+
+    <input id="startchat" type="hidden" data-roomid="<%= id %>"></input>
+    <input type="text" id="username" placeholder="user id...">
+    <input type="text" id="newmsg" placeholder="message..">
+    <button id="btn">Send</button>
+
+    <ul id="msglist">
+        
+    </ul>
+
+    <script src="/socket.io/socket.io.js"></script>
+
+    <script> 
+    var socket = io();
+
+let btn = document.getElementById('btn');
+let inputMsg = document.getElementById('newmsg');
+let username = document.getElementById('username');
+let msgList = document.getElementById('msglist');
+
+socket.emit('join_room', {
+    roomid:startchat.getAttribute('data-roomid')
+  });
+
+btn.onclick = function exec() {                          //on click , messaage sent to server
+    socket.emit('msg_send', {
+        msg: inputMsg.value ,
+        username: username.value,
+        roomid: startchat.getAttribute('data-roomid')
+    });
+}
+
+
+socket.on('msg_rcvd', (data) => {                             //      listening for message
+    let limsg = document.createElement('li');                   // will add recieved data to list
+    limsg.innerText = `${data.username}: ${data.msg}`;
+    msgList.appendChild(limsg);
+})
+    </script>
+    
   </body>
   </html>

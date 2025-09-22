@@ -8,6 +8,7 @@ btn.onclick = function exec() {                          //on click , messaage s
     socket.emit('msg_send', {
         msg: inputMsg.value           
     });
+    io.to("room1").emit('revd in room 1',data);
 }
 
 socket.on('msg_rcvd', (data) => {                             //      listening for message
