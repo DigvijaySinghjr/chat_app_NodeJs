@@ -16,7 +16,9 @@
     <button id="btn">Send</button>
 
     <ul id="msglist">
-        
+        <% for(let i = 0; i < chats.length; i++) { %>
+          <li> <%= chats[i].user %>: <%= chats[i].user %> </li>
+        <% } %>
     </ul>
 
     <script src="/socket.io/socket.io.js"></script>
